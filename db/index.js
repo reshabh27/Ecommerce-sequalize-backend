@@ -22,13 +22,8 @@ db.Sequelize = Sequelize
 db.user = require('../models/user.js')(sequelize, DataTypes)
 db.product = require('../models/products.js')(sequelize, DataTypes)
 // db.books = require('../models/books')(sequelize, DataTypes)
-// db.librarian = require('../models/librarian')(sequelize, DataTypes)
 // db.userbook = require('../models/userbook')(sequelize, DataTypes)
-// db.transaction = require('../models/transaction')(sequelize, DataTypes)
 
-// db.categories = require('../models/categories')(sequelize, DataTypes)
-
-// db.bookcategory = require('../models/bookcategory')(sequelize, DataTypes)
 
 //Many to many relation between user and book
 
