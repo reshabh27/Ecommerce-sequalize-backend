@@ -1,13 +1,21 @@
-const Cart = require("../models/carts");
-
+const db = require("../db/index.js")
+const User = db.user
+const Cart = db.cart
 
 exports.handleGetCartOfUser = async (req, res) => {
     try {
-        let cart = await Cart.findOne({ owner: req.user._id }).populate('products').exec();
-        // console.log(cart);
-        if (!cart)
+        let curcart = await Cart.findAll({
+            where: { userId: req.user.id },
+            include: [{
+                model: User,
+                attributes: ['username', 'email', 'role']
+            }]
+
+        })
+        console.log(curcart);
+        if (!curcart)
             return res.send([]);
-        return res.send(cart?.products);
+        return res.status(200).send(curcart);
     } catch (err) {
         console.log(err);
         return res.status(400).send();
@@ -16,24 +24,25 @@ exports.handleGetCartOfUser = async (req, res) => {
 
 
 exports.handleAddProductInCart = async (req, res) => {
-    const oldProducts = await Cart.findOne({ owner: req.user._id });
-    // console.log(oldProducts);
-    if (oldProducts?.products?.includes(req.params.productId)) {
-        return res.status(400).send({ error: 'Product is already in the cart' });
-    }
+    // const oldProducts = await Cart.findOne({ owner: req.user._id });
+    // // console.log(oldProducts);
+    // if (oldProducts?.products?.includes(req.params.productId)) {
+    //     return res.status(400).send({ error: 'Product is already in the cart' });
+    // }
     try {
-        if (!oldProducts) {
-            const cart = new Cart({
-                products: [req.params.productId],
-                owner: req.user._id
-            });
-            await cart.save();
-        }
-        else
-            await Cart.findByIdAndUpdate(oldProducts._id, { products: [...oldProducts.products, req.params.productId] })
+        // if (!oldProducts) {
+        //     const cart = new Cart({
+        //         products: [req.params.productId],
+        //         owner: req.user._id
+        //     });
+        //     await cart.save();
+        // }
+        // else
+        //     await Cart.findByIdAndUpdate(oldProducts._id, { products: [...oldProducts.products, req.params.productId] })
         // console.log(test);
-
-        return res.send("succesfully added product in cart");
+        const newProduct = await Cart.create({ userId: req.user.id, productId: req.params.productId, quantity: 1 });
+        console.log(newProduct);
+        return res.status(200).send("succesfully added product in cart");
     } catch (err) {
         return res.send(err);
     }

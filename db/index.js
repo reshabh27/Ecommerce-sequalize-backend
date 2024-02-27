@@ -23,14 +23,32 @@ db.user = require('../models/user.js')(sequelize, DataTypes)
 db.product = require('../models/products.js')(sequelize, DataTypes)
 // db.books = require('../models/books')(sequelize, DataTypes)
 // db.userbook = require('../models/userbook')(sequelize, DataTypes)
-db.cart = require('../models/cart.js')(sequelize, DataTypes)
+db.cart = require('../models/carts.js')(sequelize, DataTypes)
 
 //Many to many relation between user and book
 
-db.user.belongsToMany(db.product, { through: db.cart, foreignKey: 'owner' });
-db.product.belongsToMany(db.user, { through: db.cart, foreignKey: 'products' });
+db.user.belongsToMany(db.product, { through: 'cart' });
+db.product.belongsToMany(db.user, { through: 'cart' });
 
-
+// db.cart = sequelize.define("Cart", {
+//     productId: {
+//         type: DataTypes.INTEGER,
+//         references: {
+//             model: db.product, // 'Actors' would also work
+//             key: 'id'
+//         }
+//     },
+//     quantity: {
+//         type: DataTypes.INTEGER
+//     },
+//     userId: {
+//         type: DataTypes.INTEGER,
+//         references: {
+//             model: db.user, // 'Actors' would also work
+//             key: 'id'
+//         }
+//     }
+// })
 
 
 sequelize.sync()
