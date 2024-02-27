@@ -23,12 +23,12 @@ db.user = require('../models/user.js')(sequelize, DataTypes)
 db.product = require('../models/products.js')(sequelize, DataTypes)
 // db.books = require('../models/books')(sequelize, DataTypes)
 // db.userbook = require('../models/userbook')(sequelize, DataTypes)
-
+db.cart = require('../models/cart.js')(sequelize, DataTypes)
 
 //Many to many relation between user and book
 
-// db.user.belongsToMany(db.books, { through: 'userbook', foreignKey: 'userId' });
-// db.books.belongsToMany(db.user, { through: 'userbook', foreignKey: 'bookId' });
+db.user.belongsToMany(db.product, { through: db.cart, foreignKey: 'owner' });
+db.product.belongsToMany(db.user, { through: db.cart, foreignKey: 'products' });
 
 
 
