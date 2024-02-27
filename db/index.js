@@ -27,8 +27,8 @@ db.cart = require('../models/carts.js')(sequelize, DataTypes)
 
 //Many to many relation between user and book
 
-db.user.belongsToMany(db.product, { through: 'cart' });
-db.product.belongsToMany(db.user, { through: 'cart' });
+db.user.belongsToMany(db.product, { through: db.cart, foreignKey: 'UserId' });
+db.product.belongsToMany(db.user, { through: db.cart, foreignKey: 'ProductId' });
 
 // db.cart = sequelize.define("Cart", {
 //     productId: {

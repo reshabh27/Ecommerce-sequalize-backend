@@ -5,10 +5,12 @@ const User = db.user;
 
 const auth = async (req, res, next) => {
     try {
-        const token = req.header('Authorization').replace('Bearer ', '')
+        const token = await req.header('Authorization').replace('Bearer ', '')
+        // console.log("token", token);
         const decoded = jwt.verify(token, "secret_secret")
         const user = await User.findOne({ id: decoded.id, 'tokens.token': token })
-
+        // console.log("decoded", decoded);
+        // console.log("user", user);
         if (!user) {
             throw new Error()
         }

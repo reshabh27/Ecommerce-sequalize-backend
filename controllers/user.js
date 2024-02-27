@@ -41,14 +41,16 @@ exports.handleLogOut = async (req, res) => {
     try {
         const curruser = req.user;
         const currentTokens = JSON.parse(curruser.tokens);
-        const isAvailable = currentTokens.some(ele => ele.token === currentTokens);
+        // console.log("currenttoken", currentTokens);
+        const isAvailable = currentTokens.some(ele => ele.token === req.token);
+        // console.log("isavailable", isAvailable);
         if (!isAvailable)
             return res.status(400).send({ message: "you are already logged out" })
         const filteredTokens = currentTokens.filter((token) => {
             return token.token !== req.token;
         })
         curruser.tokens = JSON.stringify(filteredTokens);
-        console.log(filteredTokens);
+        // console.log("filteredtoken", filteredTokens);
         await curruser.save();
         res.json("Logout successful");
     } catch (error) {

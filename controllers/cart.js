@@ -1,17 +1,17 @@
 const db = require("../db/index.js")
 const User = db.user
-const Cart = db.cart
+const Product = db.product;
+const Cart = db.cart;
 
 exports.handleGetCartOfUser = async (req, res) => {
     try {
-        let curcart = await Cart.findAll({
-            where: { userId: req.user.id },
-            include: [{
-                model: User,
-                attributes: ['username', 'email', 'role']
-            }]
-
-        })
+        let curcart = await User.findByPk(req.user.id,
+            {
+                include: [{
+                    model: Product,
+                    through: { model: Cart, },
+                }],
+            })
         console.log(curcart);
         if (!curcart)
             return res.send([]);
@@ -40,9 +40,9 @@ exports.handleAddProductInCart = async (req, res) => {
         // else
         //     await Cart.findByIdAndUpdate(oldProducts._id, { products: [...oldProducts.products, req.params.productId] })
         // console.log(test);
-        const newProduct = await Cart.create({ userId: req.user.id, productId: req.params.productId, quantity: 1 });
-        console.log(newProduct);
-        return res.status(200).send("succesfully added product in cart");
+        const newProduct = await Cart.create({ UserId: req.user.id, ProductId: req.params.productId, quantity: 1 });
+        // console.log(newProduct);
+        return res.status(200).send({ message: "succesfully added product in cart", newProduct });
     } catch (err) {
         return res.send(err);
     }
