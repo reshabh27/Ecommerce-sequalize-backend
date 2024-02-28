@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 const db = require("../db/index");
 const User = db.user;
 
+
+// 
 const auth = async (req, res, next) => {
     try {
         const token = await req.header('Authorization').replace('Bearer ', '')

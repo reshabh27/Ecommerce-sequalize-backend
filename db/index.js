@@ -30,27 +30,8 @@ db.cart = require('../models/carts.js')(sequelize, DataTypes)
 db.user.belongsToMany(db.product, { through: db.cart, foreignKey: 'UserId' });
 db.product.belongsToMany(db.user, { through: db.cart, foreignKey: 'ProductId' });
 
-// db.cart = sequelize.define("Cart", {
-//     productId: {
-//         type: DataTypes.INTEGER,
-//         references: {
-//             model: db.product, // 'Actors' would also work
-//             key: 'id'
-//         }
-//     },
-//     quantity: {
-//         type: DataTypes.INTEGER
-//     },
-//     userId: {
-//         type: DataTypes.INTEGER,
-//         references: {
-//             model: db.user, // 'Actors' would also work
-//             key: 'id'
-//         }
-//     }
-// })
-
-
+// to rebuilt tables
+// {force:true}
 sequelize.sync()
     .then(() => {
 
