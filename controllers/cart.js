@@ -5,7 +5,7 @@ const Cart = db.cart;
 
 exports.handleGetCartOfUser = async (req, res) => {
     try {
-        // 1st method to get values of many to many associated tables
+        // 1st method to get values of many to many associated tables. eager loading
         // let curcart = await User.findByPk(req.user.id,
         //     {
         //         include: [{
@@ -15,7 +15,7 @@ exports.handleGetCartOfUser = async (req, res) => {
         //     })
 
 
-        // 2nd method to get values from many to many associated tables.
+        // 2nd method to get values from many to many associated tables. lazy loading
         let data = await User.findOne({
             where: {
                 id: req.user.id
