@@ -2,10 +2,26 @@ const db = require("../db/index.js")
 const Product = db.product;
 
 
-
+// /product/getproduct?limit=
+// /product/getproduct?skip=
 exports.handleGetAllProducts = async (req, res) => {
+    let limits = {};
+    if (req.query.limit) {
+        limits = {
+            limit: parseInt(req.query.limit)
+        }
+    }
+    if (req.query.skip) {
+        limits = {
+            ...limits,
+            offset: (req.query.skip) ? parseInt(req.query.skip) : 0,
+        }
+    }
+
+    // let limit = req.query.limit || 3;
+    // let offset = req.query.offset || 0;
     try {
-        const products = await Product.findAll({});
+        const products = await Product.findAll({ ...limits });
         // console.log("here i am");
         // console.log(products);
         res.status(200).send(products);
